@@ -1,0 +1,24 @@
+{
+  "artifact": "baseline006 exp005 outer4_w1 best",
+  "bytes": 266316010,
+  "calibration": {
+    "scale": 0.99,
+    "shift_hu": -5.0
+  },
+  "channels": [
+    "nacpet",
+    "topogram",
+    "mri_combined_in_phase",
+    "mri_combined_out_phase"
+  ],
+  "checkpoint_path": "/app/checkpoints/best.pt",
+  "checkpoint_sha256": "f4e4280074e3b2bb924a1ac774dc778d215727800ff2ab782dc32b0bedffaa05",
+  "inference": {
+    "amp": true,
+    "batch_size": 4,
+    "overlap": 0.5,
+    "patch_size": [128, 128, 128],
+    "per_subject_robust_normalization": true
+  },
+  "source": "exp005_two_sided_boundary_band/variants/outer4_w1/train/checkpoints/best.pt"
+}

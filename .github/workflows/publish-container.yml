@@ -1,0 +1,38 @@
+name: Publish final BIC-MAC container
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download exact checkpoint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download final-model-20260812 --pattern best.pt --dir container/checkpoints
+
+      - name: Verify checkpoint
+        run: echo 'f4e4280074e3b2bb924a1ac774dc778d215727800ff2ab782dc32b0bedffaa05  container/checkpoints/best.pt' | sha256sum --check --strict
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push immutable image
+        uses: docker/build-push-action@v6
+        with:
+          context: container
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ghcr.io/heyufan1995/bicmac-exp005:final-20260812
