@@ -15,7 +15,7 @@ ENV PYTHONUNBUFFERED=1 \
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY model.py inference.py entrypoint.py /app/
+COPY model.py data.py losses.py infer.py entrypoint.py /app/
 COPY checkpoints/best.pt /app/checkpoints/best.pt
 COPY checkpoints/MANIFEST.json /app/checkpoints/MANIFEST.json
 

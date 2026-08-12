@@ -11,10 +11,15 @@ import nibabel as nib
 import numpy as np
 import torch
 
-from inference import FEATURE_FILES, predict_subject
+from data import FEATURE_KEYS, feature_path
+from infer import predict_subject
 
 
 EXPECTED_CHECKPOINT_SHA256 = "f4e4280074e3b2bb924a1ac774dc778d215727800ff2ab782dc32b0bedffaa05"
+FEATURE_FILES = {
+    key: feature_path(Path("/data"), key).name
+    for key in FEATURE_KEYS
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -63,6 +68,8 @@ def main() -> None:
         patch_size=parse_patch_size(os.environ.get("BICMAC_PATCH_SIZE", "128,128,128")),
         overlap=float(os.environ.get("BICMAC_OVERLAP", "0.5")),
         batch_size=int(os.environ.get("BICMAC_BATCH_SIZE", "4")),
+        tta_flips=[],
+        amp=True,
     )
     apply_fixed_affine(
         output_ct,
@@ -103,4 +110,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
